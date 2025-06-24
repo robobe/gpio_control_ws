@@ -1,0 +1,8 @@
+<library path="my_gpio_hw_interface">
+  <class
+    name="GPIOInterface"
+    type="gpio_hw_interface::GPIOInterface"
+    base_class_type="hardware_interface::SystemInterface">
+    <description>GPIO hardware interface using gpiod</description>
+  </class>
+</library>
