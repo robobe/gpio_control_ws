@@ -10,6 +10,7 @@ RUN apt-get update \
   ros-humble-hardware-interface \
   ros-humble-controller-manager \
   ros-humble-pluginlib \
+  ros-humble-ros2-control \
 && apt-get clean -y \
 && rm -rf /var/lib/apt/lists/*
 
@@ -19,4 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-libgpiod \
   && rm -rf /var/lib/apt/lists/*
 
-
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ros-humble-xacro \
+    ros-humble-ros2-control \
+  && rm -rf /var/lib/apt/lists/*

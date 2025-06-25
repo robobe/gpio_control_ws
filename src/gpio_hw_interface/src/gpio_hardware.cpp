@@ -18,11 +18,11 @@ hardware_interface::CallbackReturn GPIOInterface::on_init(const hardware_interfa
   gpio_states_.resize(info.joints.size(), 0.0);
   gpio_commands_.resize(info.joints.size(), 0.0);
 
-//   for (size_t i = 0; i < info.joints.size(); ++i) {
-//     int gpio_num = std::stoi(info.joints[i].parameters["gpio"]);
-//     auto *line = gpiod_chip_get_line(gpio_chip_, gpio_num);
-//     gpio_lines_.push_back(line);
-//   }
+  for (size_t i = 0; i < info.joints.size(); ++i) {
+    int gpio_num = 17;//std::stoi(info.joints[i].parameters["gpio"]);
+    auto *line = gpiod_chip_get_line(gpio_chip_, gpio_num);
+    gpio_lines_.push_back(line);
+  }
 
   return hardware_interface::CallbackReturn::SUCCESS;
 }

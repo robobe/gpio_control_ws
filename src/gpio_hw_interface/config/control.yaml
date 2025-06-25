@@ -1,0 +1,8 @@
+GPIOInterface:
+  ros__parameters:
+    joints:
+      - name: gpio_led
+        command_interfaces: ["gpio_command"]
+        state_interfaces: ["gpio_state"]
+        parameters:
+          gpio: "17"
