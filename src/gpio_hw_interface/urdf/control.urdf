@@ -6,9 +6,13 @@
       <plugin>gpio_hw_interface/GPIOInterface</plugin>
     </hardware>
     
-    <gpio name="xxx">
+    <gpio name="xxx" >
+      <param name="vacuum">17</param>
+
       <command_interface name="vacuum"/>
-      <state_interface name="vacuum" data_type="double"/>
+      <state_interface name="vacuum" data_type="double">
+        
+      </state_interface>
     </gpio>
 
   </ros2_control>

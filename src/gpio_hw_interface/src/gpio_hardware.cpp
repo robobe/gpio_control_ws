@@ -25,8 +25,14 @@ namespace gpio_hw_interface
     gpio_states_.resize(info.gpios.size(), 0.0);
     gpio_commands_.resize(info.gpios.size(), 0.0);
 
-    // for (size_t i = 0; i < info.gpios.size(); ++i)
-    // {
+    for (size_t i = 0; i < info.gpios.size(); ++i)
+    {
+      RCLCPP_INFO(rclcpp::get_logger("GPIOInterface"), "HELLO HELLO --- param");  
+      for (const auto &param : info_.gpios[i].parameters)
+        {
+          RCLCPP_INFO(rclcpp::get_logger("--------------->"), "%s: %s", param.first.c_str(), param.second.c_str());
+        }
+    }
     int gpio_num = 17; // std::stoi(info.joints[i].parameters["gpio"]);
     auto *line = gpiod_chip_get_line(gpio_chip_, gpio_num);
     gpio_lines_.push_back(line);
@@ -71,6 +77,10 @@ namespace gpio_hw_interface
       for (size_t i = 0; i < info_.gpios[gpio].state_interfaces.size(); ++i)
       {
         // state_interfaces.emplace_back("xxx", "vacuum", &hw_state_);
+        for (const auto &param : info_.gpios[gpio].parameters)
+        {
+          RCLCPP_INFO(rclcpp::get_logger(""), "%s: %s", param.first.c_str(), param.second.c_str());
+        }
         state_interfaces.emplace_back(
             info_.gpios[gpio].name,
             info_.gpios[gpio].state_interfaces[i].name,
