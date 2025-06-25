@@ -4,6 +4,7 @@
   <ros2_control name="GPIOInterface" type="system">
     <hardware>
       <plugin>gpio_hw_interface/GPIOInterface</plugin>
+      <param name="gpiochip">gpiochip4</param>
     </hardware>
     
     <gpio name="xxx" >
