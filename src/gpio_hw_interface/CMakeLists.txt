@@ -14,9 +14,18 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
 )
 
 find_package(ament_cmake REQUIRED)
+find_package(PkgConfig REQUIRED)
+
+pkg_check_modules(GPIOD REQUIRED libgpiod)
+
 foreach(Dependency IN ITEMS ${THIS_PACKAGE_INCLUDE_DEPENDS})
   find_package(${Dependency} REQUIRED)
 endforeach()
+
+include_directories(
+  include
+  ${GPIOD_INCLUDE_DIRS}
+)
 
 add_library(${PROJECT_NAME}
   SHARED
@@ -30,6 +39,11 @@ $<INSTALL_INTERFACE:include/gpio_hw_interface>
 ament_target_dependencies(
   ${PROJECT_NAME} PUBLIC
   ${THIS_PACKAGE_INCLUDE_DEPENDS}
+)
+
+target_link_libraries(gpio_hw_interface
+  PUBLIC
+  ${GPIOD_LIBRARIES}
 )
 
 pluginlib_export_plugin_description_file(hardware_interface gpio_hw_plugin.xml)

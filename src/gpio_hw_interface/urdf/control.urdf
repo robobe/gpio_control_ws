@@ -1,13 +1,13 @@
 <robot name="robot_name">
-    
+  <link name="world"/>
 
-<ros2_control name="GPIOInterface" type="system">
-  <hardware>
-    <plugin>gpio_hw_interface/GPIOInterface</plugin>
-  </hardware>
-  <joint name="gpio_led">
-    <command_interface name="gpio_command"/>
-    <state_interface name="gpio_state"/>
-  </joint>
-</ros2_control>
+  <ros2_control name="GPIOInterface" type="system">
+    <hardware>
+      <plugin>gpio_hw_interface/GPIOInterface</plugin>
+    </hardware>
+    <gpio name="xxx">
+      <command_interface name="led"/>
+      <state_interface name="led"/>
+    </gpio>
+  </ros2_control>
 </robot>

@@ -31,5 +31,6 @@ private:
   std::vector<double> gpio_commands_;
   std::vector<gpiod_line *> gpio_lines_;
   gpiod_chip * gpio_chip_;
+  double hw_state_, hw_command_;
 };
 }  // namespace my_gpio_hw_interface

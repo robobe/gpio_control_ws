@@ -1,8 +1,13 @@
-GPIOInterface:
+controller_manager:
   ros__parameters:
-    joints:
-      - name: gpio_led
-        command_interfaces: ["gpio_command"]
-        state_interfaces: ["gpio_state"]
-        parameters:
-          gpio: "17"
+    update_rate: 10  # Hz
+
+gpio_controller:
+  ros__parameters:
+    type: gpio_controllers/GpioCommandController
+    gpios:
+      - xxx
+    command_interfaces:
+      xxx:
+        - interfaces:
+          - led
