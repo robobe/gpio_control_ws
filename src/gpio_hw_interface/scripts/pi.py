@@ -32,11 +32,11 @@ class MyNode(Node):
         msg.header.stamp = self.get_clock().now().to_msg()
         msg.interface_groups = ["xxx"]
         val = InterfaceValue()
-        val.interface_names = ["vacuum"]
+        val.interface_names = ["vacuum", "camera"]
         if self.counter % 2:
-            val.values = [1.0]
+            val.values = [1.0, 0.0]
         else:
-            val.values = [0.0]
+            val.values = [0.0, 1.0]
         msg.interface_values = [val]
         self.get_logger().info("--")
 

@@ -13,6 +13,7 @@ gpio_controller:
       xxx:
         - interfaces:
           - vacuum
+          - camera
     state_interfaces:
       xxx:
         - interfaces:

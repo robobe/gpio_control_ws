@@ -22,7 +22,7 @@ namespace gpio_hw_interface
     RCLCPP_INFO(rclcpp::get_logger("GPIOInterface"), "Opened gpiochip4 successfully.");
 
     // TODO: handle more then one gpio bank
-    gpio_states_.resize(info.gpios.size(), 0.0);
+    // gpio_states_.resize(info.gpios.size(), 0.0);
     // gpio_commands_.resize(info.gpios.size(), 0.0);
 
     for (size_t i = 0; i < info.gpios.size(); ++i)
@@ -35,6 +35,7 @@ namespace gpio_hw_interface
           auto *line = gpiod_chip_get_line(gpio_chip_, gpio_num);
           gpio_lines_[name] = line;
           gpio_commands_[name] = 0.0;
+          gpio_states_[name] = 0.0;
         }
     }
     // int gpio_num = 17; // std::stoi(info.joints[i].parameters["gpio"]);
@@ -89,7 +90,7 @@ namespace gpio_hw_interface
         state_interfaces.emplace_back(
             info_.gpios[gpio].name,
             info_.gpios[gpio].state_interfaces[i].name,
-            &gpio_states_[i]);
+            &gpio_states_[info_.gpios[gpio].state_interfaces[i].name]);
       }
     }
     return state_interfaces;
@@ -132,6 +133,7 @@ namespace gpio_hw_interface
     // {
     //   gpio_states_[i] = gpiod_line_get_value(gpio_lines_[i]);
     // }
+    // TODO: finish read
     return hardware_interface::return_type::OK;
   }
 
@@ -141,8 +143,8 @@ namespace gpio_hw_interface
     for (const auto &pair : gpio_lines_) 
     {
       int new_command = static_cast<int>(gpio_commands_[pair.first]);
-      // RCLCPP_INFO(rclcpp::get_logger(""), std::to_string(new_command).c_str());
-      // RCLCPP_INFO(rclcpp::get_logger(""), std::to_string(gpio_lines_[i]).c_str());
+      RCLCPP_INFO(rclcpp::get_logger(""), pair.first.c_str());
+      RCLCPP_INFO(rclcpp::get_logger(""), std::to_string(new_command).c_str());
       gpiod_line_set_value(pair.second, new_command);
     }
     return hardware_interface::return_type::OK;

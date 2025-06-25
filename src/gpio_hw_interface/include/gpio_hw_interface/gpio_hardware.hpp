@@ -31,7 +31,8 @@ namespace gpio_hw_interface
     hardware_interface::return_type write(const rclcpp::Time &time, const rclcpp::Duration &period) override;
 
   private:
-    std::vector<double> gpio_states_;
+    // std::vector<double> gpio_states_;
+    std::map<std::string/*name*/,double> gpio_states_;
     // std::vector<double> gpio_commands_;
     std::map<std::string/*name*/,double> gpio_commands_;
     // std::vector<gpiod_line *> gpio_lines_;
