@@ -71,10 +71,11 @@ namespace gpio_hw_interface
 
   hardware_interface::CallbackReturn GPIOInterface::on_deactivate(const rclcpp_lifecycle::State &)
   {
-    // for (auto *line : gpio_lines_)
-    // {
-    //   gpiod_line_release(line);
-    // }
+
+    for (const auto &pair : gpio_lines_)
+    {
+      gpiod_line_release(pair.second);
+    }
     return hardware_interface::CallbackReturn::SUCCESS;
   }
 
