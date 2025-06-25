@@ -27,15 +27,18 @@ namespace gpio_hw_interface
 
     for (size_t i = 0; i < info.gpios.size(); ++i)
     {
-      RCLCPP_INFO(rclcpp::get_logger("GPIOInterface"), "HELLO HELLO --- param");  
       for (const auto &param : info_.gpios[i].parameters)
         {
           RCLCPP_INFO(rclcpp::get_logger("--------------->"), "%s: %s", param.first.c_str(), param.second.c_str());
+          auto name = param.first;
+          auto gpio_num = std::stoi(param.second);
+          auto *line = gpiod_chip_get_line(gpio_chip_, gpio_num);
+          gpio_lines_[name] = line;
         }
     }
-    int gpio_num = 17; // std::stoi(info.joints[i].parameters["gpio"]);
-    auto *line = gpiod_chip_get_line(gpio_chip_, gpio_num);
-    gpio_lines_.push_back(line);
+    // int gpio_num = 17; // std::stoi(info.joints[i].parameters["gpio"]);
+    // auto *line = gpiod_chip_get_line(gpio_chip_, gpio_num);
+    // gpio_lines_.push_back(line);
     // }
 
     RCLCPP_INFO(rclcpp::get_logger("GPIOInterface"), "HELLO HELLO ------------------finish init");
@@ -46,8 +49,9 @@ namespace gpio_hw_interface
   {
     // for (size_t i = 0; i < gpio_lines_.size(); ++i)
     // {
-    gpiod_line_request_output(gpio_lines_[0], "ros2_control", 0);
-    // }
+    for (const auto &pair : gpio_lines_) {
+      gpiod_line_request_output(pair.second, "ros2_control", 0);
+    }
     RCLCPP_INFO(rclcpp::get_logger("GPIOInterface"), "HELLO on activate ------------------on activate");
     return hardware_interface::CallbackReturn::SUCCESS;
   }
@@ -123,22 +127,22 @@ namespace gpio_hw_interface
 
   hardware_interface::return_type GPIOInterface::read(const rclcpp::Time &, const rclcpp::Duration &)
   {
-    for (size_t i = 0; i < gpio_lines_.size(); ++i)
-    {
-      gpio_states_[i] = gpiod_line_get_value(gpio_lines_[i]);
-    }
+    // for (size_t i = 0; i < gpio_lines_.size(); ++i)
+    // {
+    //   gpio_states_[i] = gpiod_line_get_value(gpio_lines_[i]);
+    // }
     return hardware_interface::return_type::OK;
   }
 
   hardware_interface::return_type GPIOInterface::write(const rclcpp::Time &, const rclcpp::Duration &)
   {
-    
-    for (size_t i = 0; i < gpio_lines_.size(); ++i)
+          
+    for (const auto &pair : gpio_lines_) 
     {
-      int new_command = static_cast<int>(gpio_commands_[i]);
-      RCLCPP_INFO(rclcpp::get_logger(""), std::to_string(new_command).c_str());
+      int new_command = static_cast<int>(gpio_commands_[0]);
+      // RCLCPP_INFO(rclcpp::get_logger(""), std::to_string(new_command).c_str());
       // RCLCPP_INFO(rclcpp::get_logger(""), std::to_string(gpio_lines_[i]).c_str());
-      gpiod_line_set_value(gpio_lines_[i], new_command);
+      gpiod_line_set_value(pair.second, new_command);
     }
     return hardware_interface::return_type::OK;
   }

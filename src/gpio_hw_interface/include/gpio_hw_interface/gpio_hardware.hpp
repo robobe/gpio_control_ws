@@ -13,6 +13,7 @@
 #include <gpiod.h>
 #include <vector>
 #include <string>
+#include <map>
 
 namespace gpio_hw_interface
 {
@@ -32,8 +33,9 @@ namespace gpio_hw_interface
   private:
     std::vector<double> gpio_states_;
     std::vector<double> gpio_commands_;
-    std::vector<gpiod_line *> gpio_lines_;
+    // std::vector<gpiod_line *> gpio_lines_;
+    std::map<std::string/*name*/, gpiod_line*> gpio_lines_;
     gpiod_chip *gpio_chip_;
-    double hw_state_, hw_command_;
+    // double hw_state_, hw_command_;
   };
 } // namespace my_gpio_hw_interface
