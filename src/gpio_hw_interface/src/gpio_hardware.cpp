@@ -5,8 +5,6 @@
 namespace gpio_hw_interface
 {
 
-
-
   hardware_interface::CallbackReturn GPIOInterface::on_init(const hardware_interface::HardwareInfo &info)
   {
     if (hardware_interface::SystemInterface::on_init(info) != hardware_interface::CallbackReturn::SUCCESS)
@@ -23,14 +21,15 @@ namespace gpio_hw_interface
     }
     RCLCPP_INFO(rclcpp::get_logger("GPIOInterface"), "Opened gpiochip4 successfully.");
 
+    // TODO: handle more then one gpio bank
     gpio_states_.resize(info.gpios.size(), 0.0);
     gpio_commands_.resize(info.gpios.size(), 0.0);
 
     // for (size_t i = 0; i < info.gpios.size(); ++i)
     // {
-      int gpio_num = 17; // std::stoi(info.joints[i].parameters["gpio"]);
-      auto *line = gpiod_chip_get_line(gpio_chip_, gpio_num);
-      gpio_lines_.push_back(line);
+    int gpio_num = 17; // std::stoi(info.joints[i].parameters["gpio"]);
+    auto *line = gpiod_chip_get_line(gpio_chip_, gpio_num);
+    gpio_lines_.push_back(line);
     // }
 
     RCLCPP_INFO(rclcpp::get_logger("GPIOInterface"), "HELLO HELLO ------------------finish init");
@@ -41,7 +40,7 @@ namespace gpio_hw_interface
   {
     // for (size_t i = 0; i < gpio_lines_.size(); ++i)
     // {
-      gpiod_line_request_output(gpio_lines_[0], "ros2_control", 0);
+    gpiod_line_request_output(gpio_lines_[0], "ros2_control", 0);
     // }
     RCLCPP_INFO(rclcpp::get_logger("GPIOInterface"), "HELLO on activate ------------------on activate");
     return hardware_interface::CallbackReturn::SUCCESS;
@@ -64,8 +63,20 @@ namespace gpio_hw_interface
     RCLCPP_INFO(rclcpp::get_logger(""), std::to_string(info_.gpios.size()).c_str());
     RCLCPP_INFO(rclcpp::get_logger(""), std::to_string(info_.gpios[0].state_interfaces.size()).c_str());
     RCLCPP_INFO(rclcpp::get_logger(""), "-----------cc------------");
+
     std::vector<hardware_interface::StateInterface> state_interfaces;
-    state_interfaces.emplace_back("xxx", "vacuum", &hw_state_);
+
+    for (size_t gpio = 0; gpio < info_.gpios.size(); ++gpio)
+    {
+      for (size_t i = 0; i < info_.gpios[gpio].state_interfaces.size(); ++i)
+      {
+        // state_interfaces.emplace_back("xxx", "vacuum", &hw_state_);
+        state_interfaces.emplace_back(
+            info_.gpios[gpio].name,
+            info_.gpios[gpio].state_interfaces[i].name,
+            &gpio_states_[i]);
+      }
+    }
     return state_interfaces;
   }
 
@@ -85,7 +96,18 @@ namespace gpio_hw_interface
     RCLCPP_INFO(rclcpp::get_logger(""), info_.gpios[0].parameters["initial_value"].c_str());
     RCLCPP_INFO(rclcpp::get_logger(""), "-----------------------");
     // prefix_name, interface_name, value_ptr)
-    command_interfaces.emplace_back("xxx", "vacuum", &hw_command_);
+
+    // command_interfaces.emplace_back("xxx", "vacuum", &hw_command_);
+    for (size_t gpio = 0; gpio < info_.gpios.size(); ++gpio)
+    {
+      for (size_t i = 0; i < info_.gpios[gpio].command_interfaces.size(); ++i)
+      {
+        command_interfaces.emplace_back(
+            info_.gpios[gpio].name,
+            info_.gpios[gpio].command_interfaces[i].name,
+            &gpio_commands_[i]);
+      }
+    }
     return command_interfaces;
   }
 
@@ -100,9 +122,10 @@ namespace gpio_hw_interface
 
   hardware_interface::return_type GPIOInterface::write(const rclcpp::Time &, const rclcpp::Duration &)
   {
-    int new_command = static_cast<int>(hw_command_);
+    
     for (size_t i = 0; i < gpio_lines_.size(); ++i)
     {
+      int new_command = static_cast<int>(gpio_commands_[i]);
       RCLCPP_INFO(rclcpp::get_logger(""), std::to_string(new_command).c_str());
       // RCLCPP_INFO(rclcpp::get_logger(""), std::to_string(gpio_lines_[i]).c_str());
       gpiod_line_set_value(gpio_lines_[i], new_command);
