@@ -4,18 +4,16 @@ controller_manager:
 
     gpio_controller:
       type: gpio_controllers/GpioCommandController
-      
+
 gpio_controller:
   ros__parameters:
-    type: gpio_controllers/GpioCommandController
     gpios:
       - xxx
-      - yyy
     command_interfaces:
       xxx:
         - interfaces:
-          - led1
+          - vacuum
     state_interfaces:
       xxx:
         - interfaces:
-          - led2
+          - vacuum

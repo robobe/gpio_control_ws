@@ -5,16 +5,11 @@
     <hardware>
       <plugin>gpio_hw_interface/GPIOInterface</plugin>
     </hardware>
+    
     <gpio name="xxx">
-      <parameters>
-        <initial_value>1.0</initial_value>
-      </parameters>
-      <command_interface name="led1">
-        
-      </command_interface>
-      <state_interface name="led2"/>
+      <command_interface name="vacuum"/>
+      <state_interface name="vacuum" data_type="double"/>
     </gpio>
-    <gpio name="yyy">
-    </gpio>
+
   </ros2_control>
 </robot>

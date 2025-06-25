@@ -28,9 +28,9 @@ namespace gpio_hw_interface
 
     // for (size_t i = 0; i < info.gpios.size(); ++i)
     // {
-    //   int gpio_num = 17; // std::stoi(info.joints[i].parameters["gpio"]);
-    //   auto *line = gpiod_chip_get_line(gpio_chip_, gpio_num);
-    //   gpio_lines_.push_back(line);
+      // int gpio_num = 17; // std::stoi(info.joints[i].parameters["gpio"]);
+      // auto *line = gpiod_chip_get_line(gpio_chip_, gpio_num);
+      // gpio_lines_.push_back(line);
     // }
 
     RCLCPP_INFO(rclcpp::get_logger("GPIOInterface"), "HELLO HELLO ------------------finish init");
@@ -41,7 +41,7 @@ namespace gpio_hw_interface
   {
     // for (size_t i = 0; i < gpio_lines_.size(); ++i)
     // {
-    //   gpiod_line_request_output(gpio_lines_[i], "ros2_control", 0);
+      gpiod_line_request_output(gpio_lines_[0], "ros2_control", 0);
     // }
     RCLCPP_INFO(rclcpp::get_logger("GPIOInterface"), "HELLO on activate ------------------on activate");
     return hardware_interface::CallbackReturn::SUCCESS;
@@ -60,12 +60,12 @@ namespace gpio_hw_interface
   {
     RCLCPP_INFO(rclcpp::get_logger(""), "----------export_state_interfaces-------------");
     RCLCPP_INFO(rclcpp::get_logger(""), info_.gpios[0].name.c_str());
-    RCLCPP_INFO(rclcpp::get_logger(""), info_.gpios[1].name.c_str());
+    // RCLCPP_INFO(rclcpp::get_logger(""), info_.gpios[1].name.c_str());
     RCLCPP_INFO(rclcpp::get_logger(""), std::to_string(info_.gpios.size()).c_str());
     RCLCPP_INFO(rclcpp::get_logger(""), std::to_string(info_.gpios[0].state_interfaces.size()).c_str());
     RCLCPP_INFO(rclcpp::get_logger(""), "-----------cc------------");
     std::vector<hardware_interface::StateInterface> state_interfaces;
-    state_interfaces.emplace_back(info_.gpios[0].name.c_str(), "led2", &hw_state_);
+    state_interfaces.emplace_back("xxx", "vacuum", &hw_state_);
     return state_interfaces;
   }
 
@@ -85,7 +85,7 @@ namespace gpio_hw_interface
     RCLCPP_INFO(rclcpp::get_logger(""), info_.gpios[0].parameters["initial_value"].c_str());
     RCLCPP_INFO(rclcpp::get_logger(""), "-----------------------");
     // prefix_name, interface_name, value_ptr)
-    command_interfaces.emplace_back(info_.gpios[0].name.c_str(), "led1", &hw_command_);
+    command_interfaces.emplace_back("xxx", "vacuum", &hw_command_);
     return command_interfaces;
   }
 
