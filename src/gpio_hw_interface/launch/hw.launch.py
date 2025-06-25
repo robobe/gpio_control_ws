@@ -59,6 +59,6 @@ def generate_launch_description():
 
     ld.add_action(node_robot_state_publisher)
     ld.add_action(control_node)
-    # ld.add_action(gpio_controller_spawner)
+    ld.add_action(gpio_controller_spawner)
     return ld
 

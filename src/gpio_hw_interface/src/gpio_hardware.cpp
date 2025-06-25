@@ -16,21 +16,21 @@ namespace gpio_hw_interface
 
     RCLCPP_INFO(rclcpp::get_logger("GPIOInterface"), "HELLO HELLO ------------------");
 
-    // gpio_chip_ = gpiod_chip_open_by_name("gpiochip4"); // Pi 5 J8 header
-    // if (!gpio_chip_)
-    // {
-    //   return hardware_interface::CallbackReturn::ERROR;
-    // }
-    // RCLCPP_INFO(rclcpp::get_logger("GPIOInterface"), "Opened gpiochip4 successfully.");
+    gpio_chip_ = gpiod_chip_open_by_name("gpiochip4"); // Pi 5 J8 header
+    if (!gpio_chip_)
+    {
+      return hardware_interface::CallbackReturn::ERROR;
+    }
+    RCLCPP_INFO(rclcpp::get_logger("GPIOInterface"), "Opened gpiochip4 successfully.");
 
-    // gpio_states_.resize(info.gpios.size(), 0.0);
-    // gpio_commands_.resize(info.gpios.size(), 0.0);
+    gpio_states_.resize(info.gpios.size(), 0.0);
+    gpio_commands_.resize(info.gpios.size(), 0.0);
 
     // for (size_t i = 0; i < info.gpios.size(); ++i)
     // {
-      // int gpio_num = 17; // std::stoi(info.joints[i].parameters["gpio"]);
-      // auto *line = gpiod_chip_get_line(gpio_chip_, gpio_num);
-      // gpio_lines_.push_back(line);
+      int gpio_num = 17; // std::stoi(info.joints[i].parameters["gpio"]);
+      auto *line = gpiod_chip_get_line(gpio_chip_, gpio_num);
+      gpio_lines_.push_back(line);
     // }
 
     RCLCPP_INFO(rclcpp::get_logger("GPIOInterface"), "HELLO HELLO ------------------finish init");
@@ -100,9 +100,12 @@ namespace gpio_hw_interface
 
   hardware_interface::return_type GPIOInterface::write(const rclcpp::Time &, const rclcpp::Duration &)
   {
+    int new_command = static_cast<int>(hw_command_);
     for (size_t i = 0; i < gpio_lines_.size(); ++i)
     {
-      gpiod_line_set_value(gpio_lines_[i], static_cast<int>(gpio_commands_[i]));
+      RCLCPP_INFO(rclcpp::get_logger(""), std::to_string(new_command).c_str());
+      // RCLCPP_INFO(rclcpp::get_logger(""), std::to_string(gpio_lines_[i]).c_str());
+      gpiod_line_set_value(gpio_lines_[i], new_command);
     }
     return hardware_interface::return_type::OK;
   }
