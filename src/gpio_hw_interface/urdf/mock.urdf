@@ -1,0 +1,19 @@
+<robot name="robot_name">
+  <link name="world"/>
+<ros2_control name="MockHardwareSystem" type="system">
+  <hardware>
+    <plugin>mock_components/GenericSystem</plugin>
+    <param name="calculate_dynamics">false</param>
+    <param name="custom_interface_with_following_offset"></param>
+    <param name="disable_commands">false</param>
+    <param name="mock_gpio_commands">true</param>
+    <param name="mock_sensor_commands">false</param>
+    <param name="position_state_following_offset">0.0</param>
+  </hardware>
+
+  <gpio name="flange_vacuum">
+    <command_interface name="vacuum"/>
+    <state_interface name="vacuum" data_type="double"/>
+  </gpio>
+</ros2_control>
+</robot>

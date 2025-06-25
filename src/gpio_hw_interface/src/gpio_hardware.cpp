@@ -5,12 +5,7 @@
 namespace gpio_hw_interface
 {
 
-  hardware_interface::CallbackReturn on_configure(const rclcpp_lifecycle::State & /*previous_state*/)
-  {
-    RCLCPP_INFO(rclcpp::get_logger("GPIOInterface"), "on_configure() called.");
-    // Init GPIO here
-    return hardware_interface::CallbackReturn::SUCCESS;
-  }
+
 
   hardware_interface::CallbackReturn GPIOInterface::on_init(const hardware_interface::HardwareInfo &info)
   {
@@ -44,29 +39,33 @@ namespace gpio_hw_interface
 
   hardware_interface::CallbackReturn GPIOInterface::on_activate(const rclcpp_lifecycle::State &)
   {
-    for (size_t i = 0; i < gpio_lines_.size(); ++i)
-    {
-      gpiod_line_request_output(gpio_lines_[i], "ros2_control", 0);
-    }
+    // for (size_t i = 0; i < gpio_lines_.size(); ++i)
+    // {
+    //   gpiod_line_request_output(gpio_lines_[i], "ros2_control", 0);
+    // }
+    RCLCPP_INFO(rclcpp::get_logger("GPIOInterface"), "HELLO on activate ------------------on activate");
     return hardware_interface::CallbackReturn::SUCCESS;
   }
 
   hardware_interface::CallbackReturn GPIOInterface::on_deactivate(const rclcpp_lifecycle::State &)
   {
-    for (auto *line : gpio_lines_)
-    {
-      gpiod_line_release(line);
-    }
+    // for (auto *line : gpio_lines_)
+    // {
+    //   gpiod_line_release(line);
+    // }
     return hardware_interface::CallbackReturn::SUCCESS;
   }
 
   std::vector<hardware_interface::StateInterface> GPIOInterface::export_state_interfaces()
   {
-    RCLCPP_INFO(rclcpp::get_logger(""), "----------cc-------------");
+    RCLCPP_INFO(rclcpp::get_logger(""), "----------export_state_interfaces-------------");
     RCLCPP_INFO(rclcpp::get_logger(""), info_.gpios[0].name.c_str());
+    RCLCPP_INFO(rclcpp::get_logger(""), info_.gpios[1].name.c_str());
+    RCLCPP_INFO(rclcpp::get_logger(""), std::to_string(info_.gpios.size()).c_str());
+    RCLCPP_INFO(rclcpp::get_logger(""), std::to_string(info_.gpios[0].state_interfaces.size()).c_str());
     RCLCPP_INFO(rclcpp::get_logger(""), "-----------cc------------");
     std::vector<hardware_interface::StateInterface> state_interfaces;
-    state_interfaces.emplace_back(info_.gpios[0].name.c_str(), "led", &hw_state_);
+    state_interfaces.emplace_back(info_.gpios[0].name.c_str(), "led2", &hw_state_);
     return state_interfaces;
   }
 
@@ -78,11 +77,15 @@ namespace gpio_hw_interface
     //   command_interfaces.emplace_back(
     //       hardware_interface::CommandInterface(info_.joints[i].name, "gpio_command", &gpio_commands_[i]));
     // }
-    RCLCPP_INFO(rclcpp::get_logger(""), "-----------------------");
+    RCLCPP_INFO(rclcpp::get_logger(""), "----------export_command_interfaces-------------");
+    // read the data from the urdf
     RCLCPP_INFO(rclcpp::get_logger(""), info_.gpios[0].name.c_str());
     RCLCPP_INFO(rclcpp::get_logger(""), info_.gpios[0].state_interfaces[0].name.c_str());
+    RCLCPP_INFO(rclcpp::get_logger(""), info_.gpios[0].command_interfaces[0].name.c_str());
+    RCLCPP_INFO(rclcpp::get_logger(""), info_.gpios[0].parameters["initial_value"].c_str());
     RCLCPP_INFO(rclcpp::get_logger(""), "-----------------------");
-    command_interfaces.emplace_back(info_.gpios[0].name.c_str(), "led", &hw_command_);
+    // prefix_name, interface_name, value_ptr)
+    command_interfaces.emplace_back(info_.gpios[0].name.c_str(), "led1", &hw_command_);
     return command_interfaces;
   }
 

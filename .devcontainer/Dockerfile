@@ -23,4 +23,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-xacro \
     ros-humble-ros2-control \
+    ros-humble-ros2-controllers \
   && rm -rf /var/lib/apt/lists/*

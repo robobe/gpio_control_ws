@@ -14,7 +14,8 @@ import os
 from ament_index_python.packages import get_package_share_directory
 
 PKG="gpio_hw_interface"
-ROBOT="control.urdf"
+ROBOT="mock.urdf"
+CONFIG = "mock.yaml"
 
 def generate_launch_description():
     ld = LaunchDescription()
@@ -35,7 +36,7 @@ def generate_launch_description():
         [
             FindPackageShare(PKG),
             "config",
-            "control.yaml",
+            CONFIG,
         ]
     )
 
