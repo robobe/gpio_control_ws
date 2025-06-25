@@ -17,4 +17,4 @@ gpio_controller:
     state_interfaces:
       xxx:
         - interfaces:
-          - vacuum
+          - run

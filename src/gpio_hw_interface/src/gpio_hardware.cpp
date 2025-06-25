@@ -141,11 +141,10 @@ namespace gpio_hw_interface
 
   hardware_interface::return_type GPIOInterface::read(const rclcpp::Time &, const rclcpp::Duration &)
   {
-    // for (size_t i = 0; i < gpio_lines_.size(); ++i)
-    // {
-    //   gpio_states_[i] = gpiod_line_get_value(gpio_lines_[i]);
-    // }
-    // TODO: finish read
+    for (auto &pair: gpio_states_){
+        pair.second = static_cast<double>(gpiod_line_get_value(gpio_lines_[pair.first]));
+
+    }
     return hardware_interface::return_type::OK;
   }
 
